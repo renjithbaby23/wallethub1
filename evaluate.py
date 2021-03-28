@@ -15,16 +15,17 @@ Usage:
 import argparse
 import logging
 import pathlib
+import time
+
+import joblib
 import numpy as np
 import pandas as pd
-import joblib
-from datetime import datetime
-
-from sklearn.metrics import mean_squared_error
 from sklearn.base import BaseEstimator, TransformerMixin
-
 from sklearn.impute import SimpleImputer
-np.warnings.filterwarnings('ignore')
+from sklearn.metrics import mean_squared_error
+
+np.warnings.filterwarnings("ignore")
+
 
 class Validator(object):
     """
@@ -58,7 +59,9 @@ class Validator(object):
             raise err
 
     def _predict(self):
+        start = time.time()
         self.predictions = self._model.predict(self._data.values).astype(int)
+        print(f"Model prediction time: {time.time() - start:.2f} seconds")
         logging.info("Model predictions completed...")
 
     def _accuracy(
